@@ -1,22 +1,23 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>X-Workz Home</title>
+<title>${loggedInUser.userName} - My Account</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
+    background: #f0f2f5;
+    font-family: 'Segoe UI', sans-serif;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0d0d1a, #2d0a4e, #0d0d1a);
-    display: flex;
-    flex-direction: column;
 }
 
+/* ── Navbar ── */
 .navbar-container {
     height: 100px;
     display: flex;
@@ -28,93 +29,223 @@ body {
 .nav-right {
     display: flex;
     margin-right: 25px;
-    gap: 20px;
     align-items: center;
+    position: relative;
 }
 .bg-gradient-purple {
     background: linear-gradient(90deg, #9370DB, #4B0082);
 }
-.btn-gradient-purple {
-    background: linear-gradient(45deg, #B19CD9, #7A1FC0);
-    color: white;
-    border: none;
-    font-weight: bold;
-    font-size: 1.3rem;
-    padding: 12px 28px;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
-    text-decoration: none;
+.avatar-btn {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, #B19CD9, #7A1FC0);
+    color: white; font-weight: bold; font-size: 1.4rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none;
+    border: 2px solid rgba(255,255,255,0.6);
+    transition: transform 0.2s ease;
 }
-.btn-gradient-purple:hover {
-    background: linear-gradient(45deg, #A083D1, #5D0E99);
-    color: white;
-    transform: scale(1.08);
+.avatar-btn:hover { transform: scale(1.08); }
+
+/* Dropdown */
+.profile-dropdown {
+    display: none; position: absolute;
+    top: 62px; right: 0; background: white;
+    border-radius: 14px; min-width: 250px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+    z-index: 999; overflow: hidden;
+    border: 1px solid #e0daf7;
+    animation: fadeIn 0.2s ease;
+}
+.profile-dropdown.show { display: block; }
+@keyframes fadeIn {
+    from { opacity:0; transform:translateY(-8px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+.dropdown-header {
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid #f0ecfa;
+}
+.dropdown-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, #B19CD9, #7A1FC0);
+    color: white; font-weight: bold; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.dropdown-user-info .dd-name {
+    font-weight: 700; font-size: 0.95rem; color: #1a1a2e;
+}
+.dropdown-user-info .dd-email {
+    font-size: 0.8rem; color: #888; word-break: break-all;
+}
+.dropdown-item-custom {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 18px; color: #333;
+    text-decoration: none; font-size: 0.93rem;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.15s;
+}
+.dropdown-item-custom:hover { background: #f5f0ff; color: #5D0E99; }
+.dropdown-item-custom .item-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #f0ecfa;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0;
+}
+.dropdown-item-logout {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 18px; color: #842029;
+    text-decoration: none; font-size: 0.93rem;
+    transition: background 0.15s;
+}
+.dropdown-item-logout:hover { background: #fff5f5; }
+.dropdown-item-logout .item-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #fce7f3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0;
 }
 
-/* Center content */
-.hero-section {
-    flex: 1;
+/* ── Page Content ── */
+.account-wrapper {
+    max-width: 960px;
+    margin: 36px auto;
+    padding: 0 20px;
+    margin-left:145px;
+}
+
+/* Hello card */
+.hello-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px 36px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
+    justify-content: space-between;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    margin-bottom: 28px;
 }
-.hero-section h1 {
-    font-size: 3.5rem;
+.hello-text h2 {
+    font-size: 2rem;
     font-weight: 800;
-    color: white;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
+    color: #1a1a2e;
+    line-height: 1.2;
 }
-.hero-section p {
-    font-size: 1.2rem;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 35px;
+.hello-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
 }
-.btn-login {
-    background: linear-gradient(45deg, #7B2FBE, #4B0082);
-    color: white;
-    padding: 12px 40px;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: bold;
+.hello-avatar svg {
+    width: 52px; height: 52px; fill: #bbb;
+}
+.camera-icon {
+    position: absolute;
+    bottom: 2px; right: 2px;
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    border: 1.5px solid #ddd;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+}
+
+/* Grid of account cards */
+.account-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-left: 154px;
+}
+
+.account-card {
+    background: white;
+    border-radius: 14px;
+    padding: 28px 24px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
     text-decoration: none;
-    margin: 8px;
-    display: inline-block;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(123,47,190,0.5);
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
 }
-.btn-login:hover {
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(123,47,190,0.8);
-}
-.btn-signup {
-    background: transparent;
-    color: white;
-    padding: 12px 40px;
-    border-radius: 50px;
-    border: 2px solid rgba(147,112,219,0.7);
-    font-size: 1.1rem;
-    font-weight: bold;
+.account-card:hover {
+    box-shadow: 0 4px 16px rgba(122,31,192,0.12);
+    border-color: #e0daf7;
+    transform: translateY(-2px);
+    color: inherit;
     text-decoration: none;
-    margin: 8px;
-    display: inline-block;
-    transition: all 0.3s ease;
 }
-.btn-signup:hover {
-    background: rgba(147,112,219,0.2);
-    color: white;
-    transform: translateY(-3px);
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.card-icon {
+    width: 44px; height: 44px;
+    background: #f4f5f7;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+}
+.card-arrow {
+    color: #aaa;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+.card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+.card-desc {
+    font-size: 0.83rem;
+    color: #888;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .account-grid { grid-template-columns: 1fr; }
+    .hello-card { flex-direction: column; gap: 16px; }
+}
+@media (max-width: 900px) {
+    .account-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.dropdown-wrapper {
+    position: relative;
+    list-style: none;
+}
+.dropdown-wrapper summary {
+    list-style: none;
+}
+.dropdown-wrapper summary::-webkit-details-marker {
+    display: none;
+}
+.dropdown-wrapper[open] .profile-dropdown {
+    display: block;
+}
+.dropdown-avatar {
+    /* existing styles... */
+    overflow: hidden;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Navbar -->
+<!-- ── Navbar ── -->
 <nav class="navbar bg-gradient-purple">
   <div class="container-fluid navbar-container">
     <a class="navbar-brand" href="#">
@@ -123,18 +254,111 @@ body {
            style="border-radius:50%; object-fit:cover;">
     </a>
 
+    <!-- Avatar Dropdown -->
+   </a>
+
+       <!-- Avatar Dropdown - ONLY THIS, remove the old div block -->
+       <div class="nav-right">
+         <details class="dropdown-wrapper">
+           <summary class="avatar-btn">
+             <c:choose>
+               <c:when test="${not empty loggedInUser.imagePath}">
+                 <c:url var="navImg" value="/serveImage">
+                   <c:param name="path" value="${loggedInUser.imagePath}"/>
+                 </c:url>
+                 <img src="${navImg}"
+                      alt="${fn:toUpperCase(fn:substring(loggedInUser.emailId,0,1))}"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+                      onerror="this.style.display='none';
+                               this.nextElementSibling.style.display='flex';">
+                 <span style="display:none;">
+                   ${fn:toUpperCase(fn:substring(loggedInUser.emailId,0,1))}
+                 </span>
+               </c:when>
+               <c:otherwise>
+                 ${fn:toUpperCase(fn:substring(loggedInUser.emailId,0,1))}
+               </c:otherwise>
+             </c:choose>
+           </summary>
+
+           <div class="profile-dropdown">
+          <div class="dropdown-header">
+            <div class="dropdown-avatar">
+              <c:choose>
+                <c:when test="${not empty loggedInUser.imagePath}">
+                  <c:url var="ddImg" value="/serveImage">
+                    <c:param name="path" value="${loggedInUser.imagePath}"/>
+                  </c:url>
+                  <img src="${ddImg}"
+                       style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+                       onerror="this.style.display='none';
+                                this.parentElement.innerText=
+                                '${fn:toUpperCase(fn:substring(loggedInUser.emailId,0,1))}';">
+                </c:when>
+                <c:otherwise>
+                  ${fn:toUpperCase(fn:substring(loggedInUser.emailId,0,1))}
+                </c:otherwise>
+              </c:choose>
+            </div>
+            <div class="dropdown-user-info">
+              <div class="dd-name">${loggedInUser.userName}</div>
+              <div class="dd-email">${loggedInUser.emailId}</div>
+            </div>
+          </div>  <%-- closes dropdown-header only --%>
+          <a href="profilepage?id=${loggedInUser.id}" class="dropdown-item-custom">View Profile</a>
+          <a href="editProfile?id=${loggedInUser.id}" class="dropdown-item-custom">Edit Profile</a>
+          <a href="myaccount?id=${loggedInUser.id}" class="dropdown-item-custom">My Account</a>
+          <a href="login" class="dropdown-item-logout">Logout</a>
+           </div>
+         </details>
+       </div>
+
+
   </div>
 </nav>
 
-<!-- Hero Section — Welcome centered -->
-<section class="hero-section">
-  <div>
-    <h1>Welcome</h1>
-    <p></p>
-    <a href="login"  class="btn-login">Login</a>
-    <a href="signup" class="btn-signup">Sign Up</a>
+<!-- ── Page Content ── -->
+<div class="account-wrapper">
+
+  <!-- Hello card -->
+  <div class="hello-card">
+    <div class="hello-text">
+      <h2>Hello,<br>${loggedInUser.userName}</h2>
+    </div>
+    </div>
   </div>
-</section>
+
+  <!-- Account cards grid -->
+  <div class="account-grid">
+
+    <!-- View profile -->
+    <a href="profilepage?id=${loggedInUser.id}" class="account-card">
+      <div class="card-top">
+      </div>
+      <p class="card-title">View profile</p>
+      <p class="card-desc">View profile page as others see it</p>
+    </a>
+
+    <!-- Personal information -->
+    <a href="//editProfile?id=${loggedInUser.id}" class="account-card">
+      <div class="card-top">
+      </div>
+      <p class="card-title">Personal information</p>
+      <p class="card-desc">Update your Details </p>
+    </a>
+
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('click', function(e) {
+    const wrapper = document.querySelector('.dropdown-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+        wrapper.removeAttribute('open');
+    }
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

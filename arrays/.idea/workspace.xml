@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3b8ef0d5-0664-4540-a19a-7e44938bad13" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/controller/EmployeeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/dao/EmployeeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/dao/EmployeeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/dao/EmployeeDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/dao/EmployeeDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/service/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/service/EmployeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/service/EmployeeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/service/EmployeeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/util/PasswordEncryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/java/com/xworkz/employee/encydecy/PasswordEncryption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/webapp/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../employee/src/main/webapp/signup.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../employee/src/main/webapp/signup.jsp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="3ApiLC5oBKw7XUnklIFYsHU9n0z" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CommonElements.executor": "Run",
+    "Application.FirstAndLastElement.executor": "Coverage",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "ArraysPrograms",
+    "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Desktop\NinjaQuestions" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.FirstAndLastElement">
+    <configuration name="CommonElements" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.xworkz.arrays.runner.CommonElements" />
+      <module name="arrays" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xworkz.arrays.runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FirstAndLastElement" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.xworkz.arrays.runner.FirstAndLastElement" />
+      <module name="arrays" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xworkz.arrays.runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="file://$PROJECT_DIR$" />
+      <setting name="debug" value="false" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.FirstAndLastElement" />
+        <item itemvalue="Application.CommonElements" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b8ef0d5-0664-4540-a19a-7e44938bad13" name="Changes" comment="" />
+      <created>1773295855238</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773295855238</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/arrays$FirstAndLastElement.ic" NAME="FirstAndLastElement Coverage Results" MODIFIED="1773296867239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.xworkz.arrays.runner.*</FILTER>
+    </SUITE>
+  </component>
+</project>
