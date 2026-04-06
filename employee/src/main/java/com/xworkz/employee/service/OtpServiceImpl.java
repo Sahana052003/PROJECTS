@@ -9,6 +9,8 @@ import com.xworkz.employee.utility.OtpUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class OtpServiceImpl implements OtpService{
 @Autowired
@@ -55,28 +57,29 @@ public class OtpServiceImpl implements OtpService{
 
     @Override
     public boolean verifyOtp(String emailId, String enteredOtp) {
-        System.out.println("OtpService: verifyOtp  Email: " + emailId
-                 + enteredOtp );
+        System.out.println("verifyOtp called for: " + emailId);
+
         if (enteredOtp == null || enteredOtp.trim().isEmpty()) {
             System.out.println("OTP is blank");
             return false;
         }
 
+        // Check expiry FIRST
+        LocalDateTime expiry = otpDAO.getOtpExpiry(emailId);
+        if (expiry == null || LocalDateTime.now().isAfter(expiry)) {
+            System.out.println("OTP expired for: " + emailId);
+            otpDAO.clearOtp(emailId);
+            return false;
+        }
+
         String storedOtp = otpDAO.getOtp(emailId);
-        System.out.println("Stored OTP in DB: " + storedOtp);
-
-        if (storedOtp == null || storedOtp.isEmpty()) {
-            System.out.println("No OTP found in DB for: " + emailId);
+        if (storedOtp == null || !storedOtp.equals(enteredOtp.trim())) {
+            System.out.println("OTP mismatch!");
             return false;
         }
 
-        if (!storedOtp.equals(enteredOtp.trim())) {
-            System.out.println("OTP mismatch! Entered: "
-                    + enteredOtp.trim() + " | Stored: " + storedOtp);
-            return false;
-        }
-
-        System.out.println("OTP matched! Proceeding to reset page...");
+        otpDAO.clearOtp(emailId); // clear after success
+        System.out.println("OTP matched!");
         return true;
     }
 }

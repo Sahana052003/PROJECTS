@@ -37,12 +37,38 @@ public class ForgotPasswordController {
     }
 
 //Verify Email
+@PostMapping("/verifyOtp")
+public String verifyOtp(@Valid @ModelAttribute OtpDTO otpDTO,
+                        BindingResult bindingResult, Model model) {
+
+    if (bindingResult.hasErrors()) {
+        if (bindingResult.hasFieldErrors("otp")) {
+            model.addAttribute("otpError",
+                    bindingResult.getFieldError("otp").getDefaultMessage());
+        }
+        model.addAttribute("emailId", otpDTO.getEmailId());
+        return "otpVerification";
+    }
+
+    boolean verified = otpService.verifyOtp(
+            otpDTO.getEmailId(), otpDTO.getOtp().trim());
+
+    if (verified) {
+        model.addAttribute("emailId", otpDTO.getEmailId());
+        return "resetPassword";
+    } else {
+        // Check if expired or wrong
+        model.addAttribute("otpError",
+                "OTP is invalid or has expired! Please request a new OTP.");
+        model.addAttribute("emailId", otpDTO.getEmailId());
+        return "otpVerification";
+    }
+}
+
+    // Also update verifyEmail to pass expiry seconds to JSP
     @GetMapping("/verifyEmail")
     public String verifyEmail(@Valid @ModelAttribute EmailDTO emailDTO,
-            BindingResult bindingResult, Model model) {
-
-        System.out.println("Verify email" );
-
+                              BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("emailError",
@@ -61,8 +87,9 @@ public class ForgotPasswordController {
         boolean sent = otpService.generateAndSendOtp(emailDTO.getEmailId());
         if (sent) {
             model.addAttribute("emailId", emailDTO.getEmailId());
+            model.addAttribute("otpExpirySeconds", 30); // ← pass to JSP
             model.addAttribute("successMessage",
-                    "OTP sent to " + emailDTO.getEmailId() + ". Please check your inbox.");
+                    "OTP sent to " + emailDTO.getEmailId() + ". Valid for 20 seconds.");
             return "otpVerification";
         } else {
             model.addAttribute("emailError", "Failed to send OTP. Please try again.");
@@ -70,38 +97,6 @@ public class ForgotPasswordController {
             return "email";
         }
     }
-
-
-    @PostMapping("/verifyOtp")
-    public String verifyOtp(@Valid @ModelAttribute OtpDTO otpDTO,
-            BindingResult bindingResult, Model model) {
-
-        System.out.println("Verify otp " );
-
-
-        if (bindingResult.hasErrors()) {
-            if (bindingResult.hasFieldErrors("otp")) {
-                model.addAttribute("otpError",
-                        bindingResult.getFieldError("otp").getDefaultMessage());
-            }
-            model.addAttribute("emailId", otpDTO.getEmailId());
-            return "otpVerification";
-        }
-
-        boolean verified = otpService.verifyOtp(otpDTO.getEmailId(), otpDTO.getOtp().trim());
-
-        if (verified) {
-            model.addAttribute("emailId", otpDTO.getEmailId());
-            return "resetPassword";
-        } else {
-            model.addAttribute("otpError",
-                    "Invalid OTP! Please check your email and try again.");
-            model.addAttribute("emailId", otpDTO.getEmailId());
-            return "otpVerification";
-
-        }
-    }
-
     @PostMapping("/resetPassword")
     public String resetPassword(
             @Valid ResetPasswordDTO dto,

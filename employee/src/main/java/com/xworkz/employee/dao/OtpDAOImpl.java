@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Repository
 public class OtpDAOImpl implements OtpDAO {
@@ -25,10 +26,11 @@ public class OtpDAOImpl implements OtpDAO {
             EmployeeEntity entity = (EmployeeEntity) query.getSingleResult();
 
             entity.setOtp(otp);
+            entity.setOtpExpiry(LocalDateTime.now().plusSeconds(30)); // ← 20 sec expiry
             em.merge(entity);
             tx.commit();
 
-            System.out.println("OTP saved in DB: " + otp);
+            System.out.println("OTP saved: " + otp + " | Expires: " + entity.getOtpExpiry());
             return true;
         } catch (Exception e) {
             System.out.println("Error saving OTP: " + e.getMessage());
@@ -40,7 +42,6 @@ public class OtpDAOImpl implements OtpDAO {
 
     @Override
     public String getOtp(String emailId) {
-        System.out.println("Fetching OTP for: " + emailId);
         EntityManager em = entityManagerFactory.createEntityManager();
         try {
             Query query = em.createNamedQuery("findEmail");
@@ -56,8 +57,23 @@ public class OtpDAOImpl implements OtpDAO {
     }
 
     @Override
+    public LocalDateTime getOtpExpiry(String emailId) {  // ← NEW method
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try {
+            Query query = em.createNamedQuery("findEmail");
+            query.setParameter("email", emailId);
+            EmployeeEntity entity = (EmployeeEntity) query.getSingleResult();
+            return entity.getOtpExpiry();
+        } catch (Exception e) {
+            System.out.println("Error fetching expiry: " + e.getMessage());
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public boolean clearOtp(String emailId) {
-        System.out.println("Clearing OTP for: " + emailId);
         EntityManager em = entityManagerFactory.createEntityManager();
         try {
             EntityTransaction tx = em.getTransaction();
@@ -67,7 +83,8 @@ public class OtpDAOImpl implements OtpDAO {
             query.setParameter("email", emailId);
             EmployeeEntity entity = (EmployeeEntity) query.getSingleResult();
 
-            entity.setOtp(null);
+            entity.setOtp("0");
+            entity.setOtpExpiry(null);
             em.merge(entity);
             tx.commit();
 
