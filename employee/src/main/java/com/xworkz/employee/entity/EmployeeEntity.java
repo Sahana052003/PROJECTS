@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "employee_tb")
@@ -31,6 +32,7 @@ public class EmployeeEntity {
     private int loginAttempts;
 
     private String otp;
+    private LocalDateTime otpExpiry;
 
     @OneToOne(cascade = CascadeType.ALL)//What the things had done in Employee, it will act the same as to Image automatically
     @JoinColumn(name = "image_id")
