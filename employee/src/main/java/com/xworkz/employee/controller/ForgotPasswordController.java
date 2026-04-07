@@ -32,8 +32,8 @@ public class ForgotPasswordController {
 
     @GetMapping("/forgetPassword")
     public String showForgotPage() {
-        System.out.println("Step 1 : showForgotPage");
-        return "email";   // → forgetPassword.jsp
+        System.out.println("showForgotPage");
+        return "email";
     }
 
 //Verify Email
@@ -65,7 +65,7 @@ public String verifyOtp(@Valid @ModelAttribute OtpDTO otpDTO,
     }
 }
 
-    // Also update verifyEmail to pass expiry seconds to JSP
+    // Also update verifyEmail to otp
     @GetMapping("/verifyEmail")
     public String verifyEmail(@Valid @ModelAttribute EmailDTO emailDTO,
                               BindingResult bindingResult, Model model) {
@@ -87,9 +87,9 @@ public String verifyOtp(@Valid @ModelAttribute OtpDTO otpDTO,
         boolean sent = otpService.generateAndSendOtp(emailDTO.getEmailId());
         if (sent) {
             model.addAttribute("emailId", emailDTO.getEmailId());
-            model.addAttribute("otpExpirySeconds", 30); // ← pass to JSP
+            model.addAttribute("otpExpirySeconds", 30);
             model.addAttribute("successMessage",
-                    "OTP sent to " + emailDTO.getEmailId() + ". Valid for 20 seconds.");
+                    "OTP sent to " + emailDTO.getEmailId() + ". Valid for 30 seconds.");
             return "otpVerification";
         } else {
             model.addAttribute("emailError", "Failed to send OTP. Please try again.");

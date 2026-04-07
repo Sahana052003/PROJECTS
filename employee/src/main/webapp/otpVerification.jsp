@@ -165,7 +165,7 @@ noscript .timer-box { display:none; }
               "OTP expired" error from the server after submit.
             -->
             <div class="timer-box" id="timerBox" style="display:none;">
-              OTP expires in <span class="timer-count" id="timerCount">20</span> seconds
+              OTP expires in <span class="timer-count" id="timerCount">30</span> seconds
             </div>
 
             <div class="timer-expired" id="expiredBox" style="display:none;">
@@ -217,11 +217,7 @@ noscript .timer-box { display:none; }
 </div>
 
 <script>
-/* ─────────────────────────────────────────────
-   COUNTDOWN TIMER — 20 seconds
-   Works ONLY when JS is ON.
-   Server-side expiry check handles JS-OFF case.
-───────────────────────────────────────────── */
+/* COUNTDOWN TIMER — 20 seconds Works ONLY when JS is ON.*/
 // Before
 var EXPIRY_SECONDS = ${not empty otpExpirySeconds ? otpExpirySeconds : 30};
 var timeLeft = EXPIRY_SECONDS;

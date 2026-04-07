@@ -12,8 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class OtpServiceImpl implements OtpService{
-@Autowired
+public class OtpServiceImpl implements OtpService {
+
+    @Autowired
     private OtpDAO otpDAO;
 
     @Autowired
@@ -26,7 +27,7 @@ public class OtpServiceImpl implements OtpService{
     private EmailUtility emailUtility;
 
     @Override
-    public String sendMailWithDynamicHTMLBody(EmailDTO emailDTO){
+    public String sendMailWithDynamicHTMLBody(EmailDTO emailDTO) {
         return "";
     }
 
@@ -40,46 +41,55 @@ public class OtpServiceImpl implements OtpService{
             return false;
         }
 
-        // Generate OTP
         String otp = otpUtility.generateOtp();
+        LocalDateTime expiry = LocalDateTime.now().plusMinutes(20);
 
-        // Save OTP to DB — stays until password reset
-        boolean saved = otpDAO.saveOtp(emailId, otp);
+        System.out.println("Generated OTP: " + otp + " | Expiry: " + expiry);
+
+        boolean saved = otpDAO.saveOtp(emailId, otp, expiry);
         if (!saved) {
             System.out.println("Failed to save OTP in DB");
             return false;
         }
 
-        // Send email
         emailUtility.sendOtpEmail(emailId, otp);
+        System.out.println("OTP email sent to: " + emailId);
         return true;
     }
 
     @Override
     public boolean verifyOtp(String emailId, String enteredOtp) {
-        System.out.println("verifyOtp called for: " + emailId);
+        System.out.println("verifyOtp called for: " + emailId
+                + " | Entered: " + enteredOtp);
 
-        if (enteredOtp == null || enteredOtp.trim().isEmpty()) {
-            System.out.println("OTP is blank");
-            return false;
-        }
-
-        // Check expiry FIRST
-        LocalDateTime expiry = otpDAO.getOtpExpiry(emailId);
-        if (expiry == null || LocalDateTime.now().isAfter(expiry)) {
-            System.out.println("OTP expired for: " + emailId);
-            otpDAO.clearOtp(emailId);
-            return false;
-        }
-
+        // Step 1: get stored OTP and expiry from DB
         String storedOtp = otpDAO.getOtp(emailId);
-        if (storedOtp == null || !storedOtp.equals(enteredOtp.trim())) {
-            System.out.println("OTP mismatch!");
+        LocalDateTime expiry = otpDAO.getOtpExpiry(emailId);
+
+        System.out.println("Stored OTP: " + storedOtp + " | Expiry: " + expiry);
+
+        // Step 2: check if OTP is default (already used or never set)
+        if (storedOtp == null || storedOtp.equals("0")) {
+            System.out.println("No active OTP found for: " + emailId);
             return false;
         }
 
-        otpDAO.clearOtp(emailId); // clear after success
-        System.out.println("OTP matched!");
+        // Step 3: check expiry in service
+        if (expiry == null || LocalDateTime.now().isAfter(expiry)) {
+            System.out.println("OTP expired! Resetting to 0 in DB");
+            otpDAO.clearOtp(emailId);  // sets otp = "0", otpExpiry = null
+            return false;
+        }
+
+        // Step 4: check if OTP matches
+        if (!storedOtp.equals(enteredOtp.trim())) {
+            System.out.println("OTP mismatch! Entered: " + enteredOtp
+                    + " | Stored: " + storedOtp);
+            return false;
+        }
+
+        System.out.println("OTP matched and valid!");
         return true;
+        // Note: do NOT clear OTP here — clear only after password reset
     }
 }

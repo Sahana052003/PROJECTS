@@ -14,26 +14,24 @@ public class EmployeeResetPasswordImpl implements ResetPasswordService {
     private LoginPasswordDAO loginPasswordDAO;
 
     @Autowired
-    private OtpDAO otpDAO;   // ← inject OtpDAO here
+    private OtpDAO otpDAO;
 
     PasswordEncoder passwordEncoder = new PasswordEncryption();
 
     @Override
     public boolean resetPassword(String emailId, String password) {
-        System.out.println("ResetPassword service called for: " + emailId);
+        System.out.println("resetPassword called for: " + emailId);
 
         String encodedPassword = passwordEncoder.encode(password);
-        System.out.println("Encoded password: " + encodedPassword);
-
         boolean changed = loginPasswordDAO.changePassword(emailId, encodedPassword);
 
         if (changed) {
-            otpDAO.clearOtp(emailId);
-            System.out.println("OTP cleared from DB after successful password reset");
+            otpDAO.clearOtp(emailId);  // sets otp = "0", otpExpiry = null in DB
+            System.out.println("Password reset done. OTP set to 0 in DB");
             return true;
         }
 
-        System.out.println("Password change failed");
+        System.out.println("Password reset failed");
         return false;
     }
 }
